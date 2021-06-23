@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: db
+    restart: always
+    command: '--default-authentication-plugin=mysql_native_password'
+    volumes:
+      - ./schema/cl28-jackon.sql/:/docker-entrypoint-initdb.d/cl28-jackon.sql
+    env_file:
+      - .env
+    ports:
+      - '3306:80'
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress
+    restart: always
+    volumes:
+      - ./wp-content:/var/www/html/wp-content
+    env_file:
+      - .env
+    ports:
+      - 8080:80
+      - 443:443
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - 8081:80
